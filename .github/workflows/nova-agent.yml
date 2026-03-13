@@ -1,0 +1,21 @@
+name: Verify Agent - Nova
+
+on:
+  workflow_dispatch:
+    inputs:
+      agent_name:
+        description: 'nova'
+        required: true
+        default: 'nova'
+      agent_description:
+        description: 'Nova AI Agent'
+        required: true
+        default: 'Nova Analysis Agent'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Nova Agent
+        run: echo "Nova agent initialized"
