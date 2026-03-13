@@ -1,0 +1,21 @@
+name: Verify Agent - Sentinel
+
+on:
+  workflow_dispatch:
+    inputs:
+      agent_name:
+        description: 'sentinel'
+        required: true
+        default: 'sentinel'
+      agent_description:
+        description: 'Sentinel AI Agent'
+        required: true
+        default: 'Sentinel Monitoring Agent'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sentinel Agent
+        run: echo "Sentinel agent initialized"
