@@ -1,0 +1,56 @@
+name: Verify Human Identity
+
+on:
+  workflow_dispatch:
+    inputs:
+      agent_name:
+        description: 'Agent Name'
+        required: true
+        default: 'atlas'
+        type: choice
+        options:
+          - atlas
+          - nova
+          - orion
+          - sentinel
+          - lumina
+
+      agent_description:
+        description: 'Agent Description'
+        required: true
+        default: 'AI Agent'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install ClawHub skill
+        run: |
+          set -e
+          npx clawhub@latest install verified-agent-identity
+
+      - name: Install script dependencies
+        run: |
+          set -e
+          cd scripts
+          npm ci || npm install
+
+      - name: Create new Ethereum Identity
+        run: |
+          set -e
+          node scripts/createNewEthereumIdentity.js
+
+      - name: Link Human to Agent
+        run: |
+          set -e
+          node scripts/manualLinkHumanToAgent.js \
+          --challenge "{\"name\": \"${{ github.event.inputs.agent_name }}\", \"description\": \"${{ github.event.inputs.agent_description }}\"}"
